@@ -1,0 +1,62 @@
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  background-color: #f5f5f5; /* Un gris muy sutil de fondo */
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem 1rem;
+}
+
+mat-card-header {
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  
+  mat-card-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: #f44336; /* Rojo de Material Design */
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.actions {
+  position: relative;
+  
+  .spinner {
+    margin: 0 auto;
+  }
+}
+
+.footer-link {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  
+  a {
+    color: #3f51b5; /* Primary color de Material */
+    text-decoration: none;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
