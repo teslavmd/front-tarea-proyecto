@@ -29,7 +29,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     // 5. Interceptamos las respuestas de error del backend
     catchError((error: HttpErrorResponse) => {
       // Si el backend nos dice que no estamos autorizados (401) o prohibidos (403)
-      if (error.status === 401 || error.status === 403 && !req.url.includes('/auth/')) {
+      if ((error.status === 401 || error.status === 403) && !req.url.includes('/auth/')) {
         console.warn('Token expirado o inválido. Cerrando sesión...');
         authService.logout(); // Limpiamos el localStorage y el estado
         router.navigate(['/login']); // Lo mandamos a loguearse de nuevo

@@ -10,40 +10,55 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Nombre Completo</mat-label>
           <input matInput formControlName="nombre" type="text" placeholder="Ej: Juan Pérez">
-          <mat-error *ngIf="registerForm.get('nombre')?.hasError('required')">
+
+          @if (registerForm.get('nombre')?.hasError('required')) {
+          <mat-error>
             El nombre es obligatorio.
           </mat-error>
-          <mat-error *ngIf="registerForm.get('nombre')?.hasError('minlength')">
+          }
+
+          @if(registerForm.get('nombre')?.hasError('minlength')){
+          <mat-error>
             El nombre es muy corto.
           </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Correo Electrónico</mat-label>
           <input matInput formControlName="email" type="email" placeholder="ejemplo@undec.edu.ar">
-          <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
+          @if(registerForm.get('email')?.hasError('required')){
+          <mat-error>
             El correo es obligatorio.
           </mat-error>
-          <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
+          }
+          @if (registerForm.get('email')?.hasError('email')) {
+          <mat-error>
             Ingresa un correo válido.
           </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Contraseña</mat-label>
           <input matInput formControlName="password" type="password">
-          <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
+          @if (registerForm.get('password')?.hasError('required')) {
+          <mat-error>
             La contraseña es obligatoria.
           </mat-error>
-          <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">
+          }
+          @if (registerForm.get('password')?.hasError('minlength')) {
+          <mat-error>
             La contraseña debe tener al menos 6 caracteres.
           </mat-error>
+          }
         </mat-form-field>
 
-        <div *ngIf="errorMessage" class="error-message">
+        @if (errorMessage) {
+        <div class="error-message">
           {{ errorMessage }}
         </div>
-
+        }
         <div class="actions">
           <button 
             mat-raised-button 
@@ -51,8 +66,11 @@
             type="submit" 
             class="full-width"
             [disabled]="registerForm.invalid || isLoading">
-            <span *ngIf="!isLoading">Registrarse</span>
-            <mat-spinner *ngIf="isLoading" diameter="24" class="spinner"></mat-spinner>
+            @if (isLoading) {
+            <mat-spinner diameter="24" class="spinner"></mat-spinner>
+            } @else {
+            <span>Registrarse</span>
+            }
           </button>
         </div>
 

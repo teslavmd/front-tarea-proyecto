@@ -52,3 +52,10 @@ El servicio debe exponer:
 
 **Iteración 5: JWT Interceptor (Inyección de token en peticiones)**
 > Actúa como un desarrollador Senior en Angular. Ya tenemos nuestro AuthService y los componentes visuales listos. Siguiendo el Paso 4 de nuestro auth-spec.md, vamos a implementar el Interceptor JWT. Genera el código de jwt.interceptor.ts utilizando la nueva sintaxis funcional de Angular (HttpInterceptorFn). El interceptor debe obtener el token desde el AuthService, clonar la petición para inyectar el header Authorization: Bearer {token}, y manejar los errores (por ejemplo, si el backend devuelve un error 401, debe forzar el cierre de sesión usando el método logout() del servicio). Explícame cómo funciona la inyección funcional en los interceptores y cómo debo registrar este interceptor en el archivo app.config.ts de mi aplicación Standalone para poder defenderlo en la revisión.
+
+
+### ✅ Checklist de Verificación Manual
+* [x] **Flujo feliz:** El usuario puede registrarse e iniciar sesión exitosamente, recibiendo el token JWT y siendo redirigido a `/dashboard`.
+* [x] **Estados de error manejados:** El formulario muestra mensajes de error claros provenientes de la API (ej. "Contraseña incorrecta", "Email ya registrado") sin romper la aplicación.
+* [x] **Protección de rutas:** El `AuthGuard` redirige exitosamente a `/login` si se intenta acceder a una ruta privada sin sesión activa.
+* [x] **Inyección de Token:** El `JwtInterceptor` adjunta correctamente el header `Authorization: Bearer` en las peticiones salientes y maneja el deslogueo automático si recibe un 401/403 en rutas protegidas.
