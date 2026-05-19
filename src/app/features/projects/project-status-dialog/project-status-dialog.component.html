@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Cambiar Estado del Proyecto</h2>
+
+<mat-dialog-content>
+  <p>Seleccione el nuevo estado para el proyecto <strong>#{{ data.projectId }}</strong>:</p>
+  
+  <mat-form-field appearance="outline" class="status-select">
+    <mat-label>Estado</mat-label>
+    <mat-select [(ngModel)]="selectedStatus" [disabled]="isLoading">
+      
+      @for (status of statuses; track status) {
+        <mat-option [value]="status">{{ status }}</mat-option>
+      }
+      
+    </mat-select>
+  </mat-form-field>
+
+  @if (errorMessage) {
+    <div class="error-msg">{{ errorMessage }}</div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading">Cancelar</button>
+  
+  <button mat-flat-button color="primary" (click)="onConfirm()" [disabled]="isLoading">
+    @if (isLoading) {
+      <mat-spinner diameter="20" class="spinner-inline"></mat-spinner> Guardando...
+    } @else {
+      Guardar Cambios
+    }
+  </button>
+</mat-dialog-actions>

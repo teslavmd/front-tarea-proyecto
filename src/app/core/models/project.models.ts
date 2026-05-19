@@ -1,9 +1,7 @@
 /**
  * Enum para los estados del proyecto.
- * NOTA: Asegúrate de que estos valores coincidan EXACTAMENTE con 
- * los valores de tu enum ProjectStatus en Java.
  */
-export type ProjectStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED'; 
+export type ProjectStatus = 'PLANNED' | 'ACTIVE' | 'CLOSED'; 
 
 export interface ProjectResponse {
   id: number;

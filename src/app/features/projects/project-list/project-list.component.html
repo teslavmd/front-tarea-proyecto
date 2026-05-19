@@ -52,7 +52,7 @@
             <button mat-icon-button color="primary" matTooltip="Ver Detalle" (click)="viewDetail(project.id)">
               <mat-icon>visibility</mat-icon>
             </button>
-            <button mat-icon-button color="accent" matTooltip="Cambiar Estado" (click)="changeStatus(project.id)">
+            <button mat-icon-button color="accent" matTooltip="Cambiar Estado" (click)="changeStatus(project.id, project.status)">
               <mat-icon>edit_calendar</mat-icon>
             </button>
           </td>

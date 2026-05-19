@@ -63,7 +63,7 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         // Si sale bien, el servicio ya guardó el token. Solo nos queda redirigir.
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/projects']);
       },
       error: (err) => {
         this.isLoading = false;

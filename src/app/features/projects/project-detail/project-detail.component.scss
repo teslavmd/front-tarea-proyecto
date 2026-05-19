@@ -55,8 +55,7 @@
 
 /* Reutilizamos los colores de estado que usamos en la tabla */
 ::ng-deep {
-  .chip-pending { background-color: #fff3e0 !important; color: #e65100 !important; }
-  .chip-in_progress { background-color: #e3f2fd !important; color: #1565c0 !important; }
-  .chip-completed { background-color: #e8f5e9 !important; color: #2e7d32 !important; }
-  .chip-cancelled { background-color: #ffebee !important; color: #c62828 !important; }
+  .chip-planned { background-color: #fff3e0 !important; color: #e65100 !important; }
+  .chip-active { background-color: #e3f2fd !important; color: #1565c0 !important; }
+  .chip-closed { background-color: #e8f5e9 !important; color: #2e7d32 !important; }
 }

@@ -10,10 +10,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
 
 // Modelos y Servicios
 import { ProjectService } from '../../../core/services/project.service';
 import { ProjectResponse } from '../../../core/models/project.models';
+import { ProjectStatusDialogComponent } from '../project-status-dialog/project-status-dialog.component';
+import { ProjectStatus } from '../../../core/models/project.models';
 
 @Component({
   selector: 'app-project-list',
@@ -37,6 +40,8 @@ export class ProjectListComponent implements OnInit {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef); // <-- La forma moderna de limpiar suscripciones
   private cdr = inject(ChangeDetectorRef); // Para forzar detección de cambios si es necesario
+  private dialog = inject(MatDialog);
+
 
   // Estado del componente
   isLoading = true;
@@ -45,6 +50,7 @@ export class ProjectListComponent implements OnInit {
   // Configuración de la tabla
   displayedColumns: string[] = ['name', 'startDate', 'status', 'actions'];
   dataSource = new MatTableDataSource<ProjectResponse>([]);
+
 
   ngOnInit(): void {
     this.loadProjects();
@@ -61,8 +67,8 @@ export class ProjectListComponent implements OnInit {
         next: (projects) => {
           this.dataSource.data = projects;
           this.isLoading = false;
-          console.log(projects);
-          console.log(this.dataSource.data);
+          // console.log(projects);
+          // console.log(this.dataSource.data);
 
           this.cdr.detectChanges();
 
@@ -86,8 +92,18 @@ export class ProjectListComponent implements OnInit {
     this.router.navigate(['/projects', projectId]);
   }
 
-  changeStatus(projectId: number): void {
-    // Aquí podrías abrir un MatDialog en el futuro. Por ahora, solo logueamos.
-    console.log(`Abrir modal para cambiar estado del proyecto ${projectId}`);
+  changeStatus(projectId: number, currentStatus : ProjectStatus): void {
+    const dialogRef = this.dialog.open(ProjectStatusDialogComponent, {
+      width: '400px',
+      data: { projectId, currentStatus }
+    });
+
+    // Escuchamos el cierre del diálogo para recargar la lista si hubo cambios
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Si el diálogo devolvió "true", recargamos la lista para ver el cambio
+        setTimeout(() => this.loadProjects()); // Pequeño delay para que el backend procese el cambio
+      }
+    });
   }
 }

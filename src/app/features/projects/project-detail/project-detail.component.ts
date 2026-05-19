@@ -56,6 +56,7 @@ export class ProjectDetailComponent implements OnInit {
         this.project = data;
         this.isLoading = false;
         this.cdr.detectChanges();
+        console.log(this.project.status);
       },
       error: (err) => {
         this.errorMessage = 'No se pudo cargar el proyecto. Es posible que no exista.';

@@ -40,19 +40,19 @@
           <div matListItemTitle>Fecha de Finalización</div>
           <div matListItemLine>{{ project.endDate | date:'longDate' }}</div>
         </mat-list-item>
-
-        <mat-list-item>
-          <mat-icon matListItemIcon>flag</mat-icon>
-          <div matListItemTitle>Estado Actual</div>
-          <div matListItemLine class="chip-container">
-            <mat-chip-set>
-              <mat-chip [ngClass]="'chip-' + project.status.toLowerCase()">
-                {{ project.status }}
-              </mat-chip>
-            </mat-chip-set>
-          </div>
-        </mat-list-item>
-      </mat-list>
+            <mat-list-item>
+              <mat-icon matListItemIcon>flag</mat-icon>
+              <div matListItemTitle>Estado Actual</div>
+              
+              <div matListItemMeta>
+                <mat-chip-set>
+                  <mat-chip [ngClass]="'chip-' + (project.status ? project.status.toLowerCase() : 'default')">
+                    {{ project.status || 'Sin estado' }}
+                  </mat-chip>
+                </mat-chip-set>
+              </div>
+            </mat-list-item>
+          </mat-list>
     </mat-card-content>
 
     <mat-divider></mat-divider>
