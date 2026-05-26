@@ -12,14 +12,41 @@ El cliente se estructuró bajo el patrón de componentes Standalone (Angular 15+
 * `GET /api/v1/projects`: Consulta general (implementada vía Proyección de Base de Datos para evitar reconstitución de dominio).
 * `POST /api/v1/projects`: Alta de proyecto (valida invariante temporal de `endDate >= LocalDate.now()`).
 * `GET /api/v1/projects/{id}`: Consulta de detalle de entidad.
-* `PUT /api/v1/projects/{id}/status`: Mutación aislada del estado operativo.
+* `POST /api/v1/projects/{id}/status`: Mutación aislada del estado operativo.
 
-## 4. Criterios de Aceptación (BDD)
-* **Escenario de Alta:** Dado un usuario en `/projects/new`, cuando envía un proyecto con fechas inválidas (pasadas), entonces el backend frena la operación en el Caso de Uso (POST) devolviendo un 400 Bad Request.
-* **Escenario de Consulta Histórica:** Dado un historial de proyectos vencidos, cuando el usuario entra a `/projects`, entonces el sistema recupera la lista exitosamente ignorando la validación temporal, garantizando la visibilidad de datos históricos.
-* **Escenario de Mutación:** Dado un usuario en la grilla de proyectos, cuando hace clic en "Cambiar Estado", entonces se despliega un `MatDialog` que inyecta los datos actuales, deshabilita la UI durante la mutación HTTP, y recarga la tabla padre al cerrarse con éxito.
+
+## 4. Criterios de Aceptación (BDD — Given/When/Then)
+
+**Escenario 1: Alta exitosa de proyecto (Flujo Feliz)**
+* **Given** que el usuario se encuentra en el formulario `/projects/new` y ha completado todos los campos obligatorios con fechas válidas.
+* **When** hace clic en el botón de guardar.
+* **Then** el sistema persiste el proyecto, muestra un mensaje de éxito en pantalla y redirige al usuario al listado general de proyectos.
+
+**Escenario 2: Alta de proyecto con fechas inválidas (Flujo de Error)**
+* **Given** que el usuario se encuentra en el formulario `/projects/new`.
+* **When** ingresa una fecha de finalización (`endDate`) menor a la fecha actual y envía el formulario.
+* **Then** la UI captura el error HTTP 400 Bad Request, detiene la operación y muestra un mensaje de error inline indicando que la fecha debe ser igual o posterior a hoy.
+
+**Escenario 3: Visualización de datos históricos**
+* **Given** que el sistema contiene proyectos con fechas de finalización vencidas.
+* **When** el usuario navega a la ruta `/projects`.
+* **Then** la grilla renderiza todos los proyectos exitosamente, omitiendo la validación temporal de dominio gracias a la proyección CQRS de lectura.
+
+**Escenario 4: Cambio de Estado mediante Modal**
+* **Given** que el usuario visualiza la tabla en `/projects`.
+* **When** presiona el botón "Cambiar Estado", selecciona un nuevo estado en el diálogo modal y confirma.
+* **Then** el botón de guardar se deshabilita mostrando un estado de carga (spinner), se ejecuta la mutación HTTP, y al finalizar con éxito, el modal se cierra desencadenando la recarga asíncrona de la tabla principal sin errores de Change Detection.
 
 ---
+
+## 5. Lineamientos de Diseño Visual (UI/UX)
+Para mantener la coherencia visual con el resto de la aplicación, el desarrollo de esta feature se adhiere a las siguientes convenciones:
+* **Framework:** Angular Material (MDC-based).
+* **Layout:** Se privilegia el uso de tarjetas (`mat-card`) para formularios y vistas de detalle, y listas interactivas (`mat-list`, `mat-table`) para visualización de colecciones.
+* **Indicadores de Estado (Chips):** Los estados de negocio se representan mediante `mat-chip` con la siguiente codificación de colores estándar:
+  * `PLANNED` / `PENDING`: Tonos de advertencia suaves (Naranja/Amarillo).
+  * `ACTIVE` / `IN_PROGRESS`: Tonos informativos (Azul primario).
+  * `CLOSED` / `COMPLETED`: Tonos de éxito (Verde).
 
 ## 6. Registro de Prompts (SDD Log)
 

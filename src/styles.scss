@@ -1,0 +1,33 @@
+/* ==========================================================================
+   ESTILOS DE ESTADOS DE NEGOCIO (CHIPS) - FIX MDC MATERIAL
+   ========================================================================== */
+
+/* Proyectos: PLANNED / Tareas: TODO */
+mat-chip.chip-planned,
+mat-chip.chip-todo {
+  background-color: #fff3e0 !important;
+}
+mat-chip.chip-planned *,
+mat-chip.chip-todo * {
+  color: #e65100 !important;
+}
+
+/* Proyectos: ACTIVE / Tareas: IN_PROGRESS */
+mat-chip.chip-active,
+mat-chip.chip-in_progress {
+  background-color: #e3f2fd !important;
+}
+mat-chip.chip-active *,
+mat-chip.chip-in_progress * {
+  color: #1565c0 !important;
+}
+
+/* Proyectos: CLOSED / Tareas: DONE */
+mat-chip.chip-closed,
+mat-chip.chip-done {
+  background-color: #e8f5e9 !important;
+}
+mat-chip.chip-closed *,
+mat-chip.chip-done * {
+  color: #2e7d32 !important;
+}

@@ -51,12 +51,6 @@ El servicio debe exponer:
 > Actúa como un desarrollador Senior en Angular. Nuestro LoginComponent ya funciona perfecto. Siguiendo el auth-spec.md, ahora vamos a implementar el AuthGuard (Paso 3). Genera el código para un Guard funcional (estilo Angular moderno con CanActivateFn) que proteja nuestras rutas privadas (/projects, /tasks). Debe inyectar el AuthService y el Router. Si el usuario tiene un token válido, lo deja pasar. Si no, lo redirige a /login. Explícame brevemente cómo funciona bajo el capó la inyección en funciones y cómo debo registrar este Guard en mi archivo app.routes.ts para defenderlo en el PR.
 
 **Iteración 5: JWT Interceptor (Inyección de token en peticiones)**
-<<<<<<< HEAD:src/specs/auth-spec.md
-> Actúa como un desarrollador Senior en Angular. Ya tenemos nuestro AuthService y los componentes visuales listos. Siguiendo el Paso 4 de nuestro auth-spec.md, vamos a implementar el Interceptor JWT. El interceptor debe obtener el token desde el AuthService. Explícame cómo funciona la inyección funcional en los interceptores y cómo debo registrar este interceptor en el archivo app.config.ts de mi aplicación Standalone para poder defenderlo en la revisión.
-
-**Iteración 6: Manejo dinámico de errores (UX)**
-> Actúa como un desarrollador Senior en Angular. Necesitamos mejorar el manejo de errores en LoginComponent y RegisterComponent. Genera la lógica para el bloque error del subscribe() que sea capaz de leer respuestas dinámicas del backend. Debe verificar si el error contiene un objeto con la propiedad 'message', si es un string plano, o si debe guiarse por los códigos de estado HTTP (ej. 401 para credenciales inválidas, 409 para usuario duplicado). Explícame cómo esta responsabilidad es compartida con las respuestas HTTP de Spring Boot.
-=======
 > Actúa como un desarrollador Senior en Angular. Ya tenemos nuestro AuthService y los componentes visuales listos. Siguiendo el Paso 4 de nuestro auth-spec.md, vamos a implementar el Interceptor JWT. Genera el código de jwt.interceptor.ts utilizando la nueva sintaxis funcional de Angular (HttpInterceptorFn). El interceptor debe obtener el token desde el AuthService, clonar la petición para inyectar el header Authorization: Bearer {token}, y manejar los errores (por ejemplo, si el backend devuelve un error 401, debe forzar el cierre de sesión usando el método logout() del servicio). Explícame cómo funciona la inyección funcional en los interceptores y cómo debo registrar este interceptor en el archivo app.config.ts de mi aplicación Standalone para poder defenderlo en la revisión.
 
 
@@ -65,4 +59,3 @@ El servicio debe exponer:
 * [x] **Estados de error manejados:** El formulario muestra mensajes de error claros provenientes de la API (ej. "Contraseña incorrecta", "Email ya registrado") sin romper la aplicación.
 * [x] **Protección de rutas:** El `AuthGuard` redirige exitosamente a `/login` si se intenta acceder a una ruta privada sin sesión activa.
 * [x] **Inyección de Token:** El `JwtInterceptor` adjunta correctamente el header `Authorization: Bearer` en las peticiones salientes y maneja el deslogueo automático si recibe un 401/403 en rutas protegidas.
->>>>>>> develop:src/app/features/auth/SPEC.md

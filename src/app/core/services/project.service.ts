@@ -6,13 +6,15 @@ import {
   CreateProjectRequest, 
   ChangeProjectStatusRequest 
 } from '../models/project.models';
+import { environment } from '../../env/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-  // Ajustá el puerto y prefijo según la configuración de tu Docker/Spring
-  private readonly API_URL = 'http://localhost:8080/projects'; 
+  
+
+  private readonly API_URL = `${environment.apiUrl}/projects`; 
   
   private http = inject(HttpClient);
 

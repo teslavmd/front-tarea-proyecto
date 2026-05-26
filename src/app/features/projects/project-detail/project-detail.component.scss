@@ -52,10 +52,3 @@
   display: flex;
   justify-content: flex-start;
 }
-
-/* Reutilizamos los colores de estado que usamos en la tabla */
-::ng-deep {
-  .chip-planned { background-color: #fff3e0 !important; color: #e65100 !important; }
-  .chip-active { background-color: #e3f2fd !important; color: #1565c0 !important; }
-  .chip-closed { background-color: #e8f5e9 !important; color: #2e7d32 !important; }
-}
