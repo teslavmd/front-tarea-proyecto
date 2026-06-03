@@ -33,7 +33,9 @@ El servicio debe exponer:
 | `/login` | LoginComponent | Público | - |
 | `/register` | RegisterComponent | Público | - |
 | `/projects` | ProjectListComponent | Privado | `AuthGuard` |
+| `/projects/new` | ProjectFormComponent | Privado | `AuthGuard` |
 | `/tasks` | TaskListComponent | Privado | `AuthGuard` |
+
 
 
 ### 6. Prompts Utilizados
@@ -55,7 +57,7 @@ El servicio debe exponer:
 
 
 ### ✅ Checklist de Verificación Manual
-* [x] **Flujo feliz:** El usuario puede registrarse e iniciar sesión exitosamente, recibiendo el token JWT y siendo redirigido a `/dashboard`.
+* [x] **Flujo feliz:** El usuario puede registrarse e iniciar sesión exitosamente, recibiendo el token JWT y siendo redirigido a `/projects`.
 * [x] **Estados de error manejados:** El formulario muestra mensajes de error claros provenientes de la API (ej. "Contraseña incorrecta", "Email ya registrado") sin romper la aplicación.
 * [x] **Protección de rutas:** El `AuthGuard` redirige exitosamente a `/login` si se intenta acceder a una ruta privada sin sesión activa.
 * [x] **Inyección de Token:** El `JwtInterceptor` adjunta correctamente el header `Authorization: Bearer` en las peticiones salientes y maneja el deslogueo automático si recibe un 401/403 en rutas protegidas.

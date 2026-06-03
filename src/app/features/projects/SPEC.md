@@ -17,22 +17,27 @@ El cliente se estructuró bajo el patrón de componentes Standalone (Angular 15+
 
 ## 4. Criterios de Aceptación (BDD — Given/When/Then)
 
-**Escenario 1: Alta exitosa de proyecto (Flujo Feliz)**
+**Escenario 1: Listado exitoso de proyectos (Flujo Principal)**
+* **Given** que el usuario autenticado navega a la ruta `/projects`.
+* **When** el componente termina de inicializarse.
+* **Then** la UI oculta el loader (`mat-spinner`), renderiza la tabla de proyectos con sus respectivos estados visuales (chips) y habilita el botón de crear nuevo proyecto.
+
+**Escenario 2: Alta exitosa de proyecto (Flujo Feliz)**
 * **Given** que el usuario se encuentra en el formulario `/projects/new` y ha completado todos los campos obligatorios con fechas válidas.
 * **When** hace clic en el botón de guardar.
 * **Then** el sistema persiste el proyecto, muestra un mensaje de éxito en pantalla y redirige al usuario al listado general de proyectos.
 
-**Escenario 2: Alta de proyecto con fechas inválidas (Flujo de Error)**
+**Escenario 3: Alta de proyecto con fechas inválidas (Flujo de Error)**
 * **Given** que el usuario se encuentra en el formulario `/projects/new`.
 * **When** ingresa una fecha de finalización (`endDate`) menor a la fecha actual y envía el formulario.
 * **Then** la UI captura el error HTTP 400 Bad Request, detiene la operación y muestra un mensaje de error inline indicando que la fecha debe ser igual o posterior a hoy.
 
-**Escenario 3: Visualización de datos históricos**
+**Escenario 4: Visualización de datos históricos**
 * **Given** que el sistema contiene proyectos con fechas de finalización vencidas.
 * **When** el usuario navega a la ruta `/projects`.
 * **Then** la grilla renderiza todos los proyectos exitosamente, omitiendo la validación temporal de dominio gracias a la proyección CQRS de lectura.
 
-**Escenario 4: Cambio de Estado mediante Modal**
+**Escenario 5: Cambio de Estado mediante Modal**
 * **Given** que el usuario visualiza la tabla en `/projects`.
 * **When** presiona el botón "Cambiar Estado", selecciona un nuevo estado en el diálogo modal y confirma.
 * **Then** el botón de guardar se deshabilita mostrando un estado de carga (spinner), se ejecuta la mutación HTTP, y al finalizar con éxito, el modal se cierra desencadenando la recarga asíncrona de la tabla principal sin errores de Change Detection.

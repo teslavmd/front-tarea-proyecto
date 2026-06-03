@@ -14,6 +14,7 @@ import { environment } from '../../env/environment';
 export class ProjectService {
   
 
+  // URL base para los endpoints de proyectos (NO HARDCODEADA)
   private readonly API_URL = `${environment.apiUrl}/projects`; 
   
   private http = inject(HttpClient);
