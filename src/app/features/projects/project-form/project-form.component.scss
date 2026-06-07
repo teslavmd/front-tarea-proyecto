@@ -1,0 +1,44 @@
+.form-container {
+  padding: 24px;
+  max-width: 600px;
+  margin: 2rem auto; // Centra la tarjeta en la pantalla
+}
+
+mat-card-header {
+  margin-bottom: 16px;
+  
+  mat-card-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+}
+
+.project-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; // Espacio uniforme entre todos los campos
+}
+
+.date-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr; // Dos columnas iguales para las fechas
+  gap: 16px;
+
+  /* Diseño responsivo: si la pantalla es chica, apila las fechas */
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+mat-form-field {
+  width: 100%; // Asegura que los inputs ocupen todo el espacio disponible
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}

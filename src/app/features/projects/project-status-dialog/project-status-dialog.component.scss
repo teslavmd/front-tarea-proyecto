@@ -1,0 +1,21 @@
+mat-dialog-content {
+  min-width: 300px;
+  padding-top: 16px !important; // Añade un poco de aire arriba del select
+}
+
+.status-select {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.error-msg {
+  color: #f44336;
+  font-size: 0.875rem;
+  margin-top: 8px;
+}
+
+.spinner-inline {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}

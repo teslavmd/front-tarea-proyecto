@@ -1,0 +1,67 @@
+<div class="detail-container">
+  
+  @if(isLoading){
+  <div class="loading-shade">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+  }
+
+  @if(errorMessage && !isLoading){
+  <div class="error-state">
+    <mat-icon color="warn" class="error-icon">error_outline</mat-icon>
+    <h3>Oops...</h3>
+    <p>{{ errorMessage }}</p>
+    <button mat-stroked-button color="primary" (click)="goBack()">Volver a Proyectos</button>
+  </div>
+  }
+  
+  @if(project && !isLoading){
+  <mat-card class="detail-card mat-elevation-z3">
+    <mat-card-header class="header">
+      <div mat-card-avatar class="avatar">
+        <mat-icon>folder_open</mat-icon>
+      </div>
+      <mat-card-title class="title">{{ project.name }}</mat-card-title>
+      <mat-card-subtitle>ID Interno: #{{ project.id }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-list>
+        <mat-divider></mat-divider>
+        
+        <mat-list-item>
+          <mat-icon matListItemIcon color="primary">calendar_today</mat-icon>
+          <div matListItemTitle>Fecha de Inicio</div>
+          <div matListItemLine>{{ project.startDate | date:'longDate' }}</div>
+        </mat-list-item>
+        
+        <mat-list-item>
+          <mat-icon matListItemIcon color="accent">event_available</mat-icon>
+          <div matListItemTitle>Fecha de Finalización</div>
+          <div matListItemLine>{{ project.endDate | date:'longDate' }}</div>
+        </mat-list-item>
+            <mat-list-item>
+              <mat-icon matListItemIcon>flag</mat-icon>
+              <div matListItemTitle>Estado Actual</div>
+              
+              <div matListItemMeta>
+                <mat-chip-set>
+                  <mat-chip [ngClass]="'chip-' + (project.status ? project.status.toLowerCase() : 'default')">
+                    {{ project.status || 'Sin estado' }}
+                  </mat-chip>
+                </mat-chip-set>
+              </div>
+            </mat-list-item>
+          </mat-list>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-actions class="actions">
+      <button mat-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon> Volver al Listado
+      </button>
+    </mat-card-actions>
+  </mat-card>
+  }
+</div>

@@ -1,0 +1,79 @@
+.page-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.list-card {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+
+  mat-card-title {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+}
+
+table {
+  width: 100%;
+}
+
+.project-row:hover {
+  background-color: #f5f5f5;
+  transition: background-color 0.2s;
+}
+
+.text-center {
+  text-align: center;
+  padding: 24px;
+  color: #757575;
+}
+
+.actions-header, .actions-cell {
+  text-align: right;
+}
+
+.loading-shade {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.error-message {
+  color: #f44336;
+  text-align: center;
+  padding: 20px;
+  background-color: #ffebee;
+  border-radius: 4px;
+  margin: 16px;
+}
+
+/* Colores personalizados para los Chips de Estado */
+::ng-deep {
+  .chip-pending {
+    background-color: #fff3e0 !important;
+    color: #e65100 !important;
+  }
+  .chip-in_progress {
+    background-color: #e3f2fd !important;
+    color: #1565c0 !important;
+  }
+  .chip-completed {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+  }
+  .chip-cancelled {
+    background-color: #ffebee !important;
+    color: #c62828 !important;
+  }
+}

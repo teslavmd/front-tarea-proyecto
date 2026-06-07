@@ -1,4 +1,4 @@
-## 📝 Auth Specification (Frontend)
+## Auth Specification (Frontend)
 
 ### 1. Requerimientos Funcionales
 * **Login:** Formulario para capturar `email` y `password`.
@@ -33,7 +33,9 @@ El servicio debe exponer:
 | `/login` | LoginComponent | Público | - |
 | `/register` | RegisterComponent | Público | - |
 | `/projects` | ProjectListComponent | Privado | `AuthGuard` |
+| `/projects/new` | ProjectFormComponent | Privado | `AuthGuard` |
 | `/tasks` | TaskListComponent | Privado | `AuthGuard` |
+
 
 
 ### 6. Prompts Utilizados
@@ -42,7 +44,7 @@ El servicio debe exponer:
 > Actúa como un desarrollador Senior en Angular. Basado en el auth-spec.md que definimos y que tienes en contexto, vamos a empezar a construir la feature de autenticación paso a paso. Empecemos exclusivamente por el Paso 1: El AuthService. Necesito que me generes el código para auth.service.ts. Asegúrate de usar las mejores prácticas, tipar correctamente las interfaces de entrada y salida (coincidiendo con los DTOs LoginRequest y AuthResponse de nuestro backend en Spring Boot), y usar HttpClient para las peticiones. El servicio debe manejar el guardado del token en localStorage y exponer el estado de autenticación usando un BehaviorSubject. Explícame detalladamente qué hace cada parte y por qué tomaste esas decisiones, ya que necesito comprenderlo a fondo para defenderlo en la revisión del PR.
 
 **Iteración 2: LoginComponent (Interfaz gráfica y estado)**
-> Actúa como un desarrollador Senior en Angular. Siguiendo con el auth-spec.md, vamos a implementar el LoginComponent. Requisitos: Usa Angular Material (mat-card, mat-form-field, mat-input, mat-button). Usa Reactive Forms con validaciones (email requerido y con formato válido, password requerido con mínimo 6 caracteres). Inyecta el AuthService que creamos antes para procesar el login. Maneja el estado de carga (un spinner o deshabilitar el botón mientras se procesa). Si el login es exitoso, redirige al /projects. Si falla, muestra un mensaje de error. Genera el código del TS, el HTML y el CSS (si es necesario). Explícame cómo funcionan las validaciones reactivas y la suscripción al servicio, ya que debo explicarlo en la revisión del PR.
+> Actúa como un desarrollador Senior en Angular. Siguiendo con el auth-spec.md, vamos a implementar el LoginComponent. Requisitos: Usa Angular Material. Usa Reactive Forms con validaciones (email requerido y con formato válido, password requerido con mínimo 6 caracteres). Inyecta el AuthService que creamos antes para procesar el login. Maneja el estado de carga (un spinner o deshabilitar el botón mientras se procesa). Si el login es exitoso, redirige al /projects. Si falla, muestra un mensaje de error. Genera el código del TS, el HTML y el CSS (si es necesario). Explícame cómo funcionan las validaciones reactivas y la suscripción al servicio, ya que debo explicarlo en la revisión del PR.
 
 **Iteración 3: RegisterComponent (Nota: Surgió por observación manual)**
 > El componente de registro fue desarrollado siguiendo la misma arquitectura base del LoginComponent (Reactive Forms + Material Design), agregando la lógica de validación para el campo 'nombre' y manejando el flujo de error específico para cuentas duplicadas.
@@ -55,7 +57,7 @@ El servicio debe exponer:
 
 
 ### ✅ Checklist de Verificación Manual
-* [x] **Flujo feliz:** El usuario puede registrarse e iniciar sesión exitosamente, recibiendo el token JWT y siendo redirigido a `/dashboard`.
+* [x] **Flujo feliz:** El usuario puede registrarse e iniciar sesión exitosamente, recibiendo el token JWT y siendo redirigido a `/projects`.
 * [x] **Estados de error manejados:** El formulario muestra mensajes de error claros provenientes de la API (ej. "Contraseña incorrecta", "Email ya registrado") sin romper la aplicación.
 * [x] **Protección de rutas:** El `AuthGuard` redirige exitosamente a `/login` si se intenta acceder a una ruta privada sin sesión activa.
 * [x] **Inyección de Token:** El `JwtInterceptor` adjunta correctamente el header `Authorization: Bearer` en las peticiones salientes y maneja el deslogueo automático si recibe un 401/403 en rutas protegidas.

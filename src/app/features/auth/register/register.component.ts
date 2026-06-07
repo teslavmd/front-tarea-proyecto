@@ -60,7 +60,7 @@ export class RegisterComponent {
     this.authService.register(this.registerForm.value).subscribe({
       next: () => {
         // Al igual que en el login, si el registro es exitoso y devuelve token, entramos directo
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/projects']);
       },
       error: (err) => {
         this.isLoading = false;
