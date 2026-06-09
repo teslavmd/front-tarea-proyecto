@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Cambiar estado de la tarea</h2>
+
+@if (errorMessage) {
+  <div class="error-banner">
+    <mat-icon>error_outline</mat-icon>
+    {{ errorMessage }}
+  </div>
+}
+
+<mat-dialog-content>
+  <p class="task-title-info">
+    Tarea: <strong>{{ data.task.title }}</strong>
+  </p>
+
+  <mat-form-field appearance="outline" class="status-select">
+    <mat-label>Nuevo Estado</mat-label>
+    <mat-select [(ngModel)]="selectedStatus">
+      <mat-option value="TODO">Por Hacer (TODO)</mat-option>
+      <mat-option value="IN_PROGRESS">En Progreso</mat-option>
+      <mat-option value="DONE">Completada (DONE)</mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [disabled]="isLoading">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="onSave()" [disabled]="isLoading">
+    @if (isLoading) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      Actualizar
+    }
+  </button>
+</mat-dialog-actions>

@@ -14,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // Core
 import { ProjectService } from '../../../core/services/project.service';
 import { ProjectResponse } from '../../../core/models/project.models';
+import { TaskListComponent } from '../../tasks/task-list/task-list.component';
 
 @Component({
   selector: 'app-project-detail',
@@ -22,7 +23,8 @@ import { ProjectResponse } from '../../../core/models/project.models';
     CommonModule, DatePipe,
     MatCardModule, MatListModule, MatDividerModule,
     MatIconModule, MatButtonModule, MatChipsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    TaskListComponent
   ],
   templateUrl: './project-detail.component.html',
   styleUrls: ['./project-detail.component.scss']
