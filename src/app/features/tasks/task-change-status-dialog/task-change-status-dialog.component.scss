@@ -1,0 +1,28 @@
+.error-banner {
+  background-color: #fde0dc;
+  color: #b71c1c;
+  padding: 12px 16px;
+  margin: 0 24px 16px 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.task-title-info {
+  margin-top: 8px;
+  margin-bottom: 24px;
+  font-size: 1.1rem;
+  color: #424242;
+}
+
+.status-select {
+  width: 100%;
+}

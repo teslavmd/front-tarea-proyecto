@@ -63,5 +63,8 @@
       </button>
     </mat-card-actions>
   </mat-card>
+  @if (project) {
+  <app-task-list [projectId]="project.id" [projectStatus]="project.status"></app-task-list>
+  }
   }
 </div>

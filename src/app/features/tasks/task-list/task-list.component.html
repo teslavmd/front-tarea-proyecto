@@ -1,0 +1,61 @@
+<div class="task-list-header">
+  <h3>Tareas del Proyecto</h3>
+  <button 
+  mat-flat-button color="primary" 
+  (click)="openCreateTaskDialog()"
+  [disabled]="projectStatus === 'CLOSED'"
+  >
+    <mat-icon>add</mat-icon>
+    Nueva Tarea
+  </button>
+</div>
+
+@if (isLoading) {
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+} @else if (tasks.length === 0) {
+  <div class="empty-state">
+    <mat-icon>assignment</mat-icon>
+    <p>No hay tareas registradas para este proyecto.</p>
+  </div>
+} @else {
+  <table mat-table [dataSource]="tasks" class="mat-elevation-z2">
+
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef> Título </th>
+      <td mat-cell *matCellDef="let task"> {{ task.title }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="assignee">
+      <th mat-header-cell *matHeaderCellDef> Responsable </th>
+      <td mat-cell *matCellDef="let task"> {{ task.assignee || 'Sin asignar' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="estimateHours">
+      <th mat-header-cell *matHeaderCellDef> Horas </th>
+      <td mat-cell *matCellDef="let task"> {{ task.estimateHours }}h </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Estado </th>
+      <td mat-cell *matCellDef="let task">
+        <mat-chip [ngClass]="'chip-' + task.status.toLowerCase()">
+          {{ task.status }}
+        </mat-chip>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let task">
+        <button mat-icon-button color="accent" (click)="openChangeStatusDialog(task)" title="Cambiar Estado">
+          <mat-icon>swap_horiz</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+}

@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>Nueva Tarea</h2>
+
+@if (errorMessage) {
+  <div class="error-banner">
+    <mat-icon>error_outline</mat-icon>
+    {{ errorMessage }}
+  </div>
+}
+
+<mat-dialog-content>
+  <form [formGroup]="taskForm" class="task-form">
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Título de la tarea</mat-label>
+      <input matInput formControlName="title" placeholder="Ej: Diseñar base de datos" cdkFocusInitial>
+      @if (taskForm.get('title')?.hasError('required')) {
+        <mat-error>El título es obligatorio</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Horas estimadas</mat-label>
+        <input matInput type="number" formControlName="estimateHours" min="1">
+        @if (taskForm.get('estimateHours')?.hasError('min')) {
+          <mat-error>Debe ser mayor a 0</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estado inicial</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="TODO">Por Hacer (TODO)</mat-option>
+          <mat-option value="IN_PROGRESS">En Progreso</mat-option>
+          <mat-option value="DONE">Completada (DONE)</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Responsable (Opcional)</mat-label>
+      <input matInput formControlName="assignee" placeholder="Ej: Juan Pérez">
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [disabled]="isLoading">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="taskForm.invalid || isLoading">
+    @if (isLoading) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      Guardar Tarea
+    }
+  </button>
+</mat-dialog-actions>
