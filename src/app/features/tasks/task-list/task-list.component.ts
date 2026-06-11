@@ -88,7 +88,7 @@ export class TaskListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       // Si el modal devolvió true, fue un éxito y recargamos la lista
       if (result) {
-        setTimeout(() => this.loadTasks());
+        this.loadTasks();
       }
     });
   }

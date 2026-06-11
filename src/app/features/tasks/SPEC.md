@@ -6,36 +6,60 @@ La feature de tareas (Tasks) se implementó utilizando un patrón **Master-Detai
 ## 2. Contrato de API Consumido
 Se consumen los endpoints anidados definidos en la especificación: 
 
+* La API_URL de environment contiente el prefijo base `/api/v1` por lo tanto, las construcciones del servicio (`${apiUrl}/projects/...`) mapean exactamente a los siguientes endpoints del backend:
+
 * `GET /api/v1/projects/{projectId}/tasks`: Obtiene la colección de tareas del proyecto.
 * `POST /api/v1/projects/{projectId}/tasks`: Crea una nueva tarea (Payload: `CreateTaskRequestDTO`).
 * `POST /api/v1/projects/{projectId}/tasks/{taskId}/status`: Muta el estado de la tarea (Payload: `{ "newStatus": "DONE" }`).
 
+
 ## 3. Criterios de Aceptación (BDD)
 
 **Escenario 1: Listado de tareas y estados vacíos**
-* **Given** que el usuario navega a la vista de detalle de un proyecto.
-* **When** el componente `TaskListComponent` finaliza la petición HTTP inicial.
-* **Then** la UI oculta el loader y renderiza la tabla de tareas con sus columnas (Título, Responsable, Horas, Estado y Acciones). Si el proyecto no tiene tareas, se muestra un *Empty State* con un icono indicativo y un mensaje de que no hay registros.
+**Dado** que el usuario navega a la vista de detalle de un proyecto
+**Cuando** el componente `TaskListComponent` finaliza la petición HTTP
+**Entonces** la UI oculta el loader
+**Y** renderiza la tabla de tareas
+**Y** muestra un estado vacío (Empty State) si no hay registros
 
 **Escenario 2: Alta exitosa de tarea (Flujo Feliz)**
-* **Given** que el usuario visualiza un proyecto en estado `ACTIVE` o `PLANNED` y presiona "Nueva Tarea".
-* **When** completa el formulario del modal con un título válido (mínimo 3 caracteres), horas estimadas (>0) y presiona "Guardar".
-* **Then** el botón muestra un estado de carga, el sistema persiste la tarea, el modal se cierra automáticamente y la tabla de tareas se recarga de forma asíncrona reflejando el nuevo registro.
+**Dado** que el usuario visualiza un proyecto en estado `ACTIVE` o `PLANNED`
+**Y** abre el modal de "Nueva Tarea"
+**Cuando** completa el formulario con datos válidos
+**Y** presiona el botón de guardar
+**Entonces** el sistema persiste la tarea
+**Y** el modal se cierra automáticamente
+**Y** la tabla se recarga asíncronamente mostrando el nuevo registro
 
-**Escenario 3: Prevención de mutación en Proyectos Cerrados (Regla de Negocio)**
-* **Given** que el usuario navega al detalle de un proyecto cuyo estado es `CLOSED`.
-* **When** la UI renderiza el componente de lista de tareas.
-* **Then** el botón "Nueva Tarea" se presenta en estado deshabilitado (`disabled`), impidiendo abrir el formulario de creación.
+**Escenario 3: Prevención de mutación en Proyectos Cerrados**
+**Dado** que el usuario visualiza el detalle de un proyecto
+**Y** el estado del proyecto es `CLOSED`
+**Cuando** la UI renderiza el listado de tareas
+**Entonces** el botón "Nueva Tarea" se muestra deshabilitado
+**Y** se impide abrir el formulario de creación
 
-**Escenario 4: Manejo de error 409 Conflict al crear tarea**
-* **Given** que el usuario tiene abierto el modal de "Nueva Tarea".
-* **When** el backend rechaza la creación por una violación de regla de negocio (ej. el proyecto se cerró concurrentemente) retornando un `409 Conflict`.
-* **Then** el modal captura el error y renderiza un banner rojo (`error-banner`) mostrando el mensaje exacto devuelto por la excepción de dominio del servidor (ej. *"No se puede agregar tareas a un proyecto CLOSED"*), manteniendo el modal abierto para que el usuario lea el motivo.
+**Escenario 4: Manejo de error 400 Bad Request (Validación de datos)**
+**Dado** que el usuario tiene abierto el modal de "Nueva Tarea"
+**Cuando** ingresa un título con menos de 3 caracteres o horas estimadas en 0
+**Y** presiona el botón de guardar
+**Entonces** el backend rechaza la petición con un error HTTP 400
+**Y** la UI renderiza un banner rojo de error
+**Y** el modal se mantiene abierto para su corrección
 
-**Escenario 5: Cambio de estado de una tarea**
-* **Given** que el usuario presiona el botón de "Cambiar Estado" en la fila de una tarea específica de la grilla.
-* **When** selecciona un nuevo estado (ej. `DONE`) en el modal y confirma la acción.
-* **Then** el sistema ejecuta el endpoint de mutación de estado devolviendo un código 200, el modal se cierra, y la grilla se actualiza mostrando el chip de la tarea con el nuevo color correspondiente (verde para `DONE`).
+**Escenario 5: Manejo de error 409 Conflict (Regla de negocio)**
+**Dado** que el usuario tiene abierto el modal de "Nueva Tarea"
+**Cuando** el backend rechaza la creación por regla de negocio devolviendo HTTP 409
+**Entonces** el modal captura el error
+**Y** renderiza un banner rojo con el mensaje exacto de la excepción de dominio
+**Y** el modal se mantiene abierto
+
+**Escenario 6: Cambio de estado de una tarea**
+**Dado** que el usuario presiona "Cambiar Estado" en una fila de la grilla
+**Cuando** selecciona un nuevo estado válido en el modal
+**Y** confirma la acción
+**Entonces** la API procesa la mutación HTTP exitosamente
+**Y** el modal se cierra
+**Y** la grilla se actualiza mostrando el chip con el nuevo color correspondiente
 
 ---
 
@@ -52,17 +76,31 @@ Se consumen los endpoints anidados definidos en la especificación:
 ## 5. Notas Técnicas y Resolución de Problemas (Debugging)
 Durante el ciclo de desarrollo de esta feature se detectaron y resolvieron los siguientes incidentes técnicos:
 
-1. **Error NG0100 (ExpressionChangedAfterItHasBeenCheckedError):** Al cerrar el modal de creación exitosa, Angular detectaba un cambio abrupto en la variable `isLoading`. Se solucionó eliminando la asignación `false` previa al cierre del `MatDialogRef` y envolviendo la recarga de la grilla en un `setTimeout()` macro-task.
-2. **Error 403 Forbidden y Cierre de Sesión:** Al integrar el GET de tareas, el `jwt.interceptor` forzaba deslogueos. Se determinó que el backend estaba correctamente configurado en `SecurityConfig`, y el error se debía a la expiración natural del token JWT en el entorno de desarrollo.
-3. **Excepción Spring Data JPA (IncorrectResultSizeDataAccessException):** Al listar tareas de un proyecto con múltiples registros, el backend lanzó error 500 porque el `TaskJpaRepository` estaba tipado para retornar un `Optional<TaskEntity>`. Se refactorizó la interfaz y el adaptador para que retornen explícitamente un `List<TaskEntity>`, resolviendo el conflicto.
+1. **Error NG0100 (ExpressionChangedAfterItHasBeenCheckedError):** Al cerrar el modal de creación exitosa, Angular detectaba un cambio abrupto en la variable `isLoading`. Siguiendo el feedback del Code Review, se eliminó el workaround del `setTimeout()` y se atacó el problema de origen: se borró la mutación innecesaria de la variable de estado (`this.isLoading = false`) justo antes de la destrucción del componente por el cierre del `MatDialogRef`.
+1. **Error 403 Forbidden y Cierre de Sesión:** Al integrar el GET de tareas, el `jwt.interceptor` forzaba deslogueos. Se determinó que el backend estaba correctamente configurado en `SecurityConfig`, y el error se debía a la expiración natural del token JWT en el entorno de desarrollo.
+2. **Excepción Spring Data JPA (IncorrectResultSizeDataAccessException):** Al listar tareas de un proyecto con múltiples registros, el backend lanzó error 500 porque el `TaskJpaRepository` estaba tipado para retornar un `Optional<TaskEntity>`. Se refactorizó la interfaz y el adaptador para que retornen explícitamente un `List<TaskEntity>`, resolviendo el conflicto.
 
 ---
+## 6. Registro de Prompts (Ingeniería de Prompts y SDD Log)
 
-## 6. Registro de Prompts (SDD Log)
+A continuación se documentan las instrucciones técnicas y el contexto provisto al asistente de IA para la generación y depuración de la feature:
 
-* **Iteración 1:** Toma de decisión arquitectónica. Se optó por la Opción B (Master-Detail en una pantalla). Se generaron los modelos de DTO y el `TaskService`.
-* **Iteración 2:** Análisis de endpoints faltantes. Se detectó la ausencia del método `GET` general de tareas en el `TaskController` de Spring Boot y se implementó.
-* **Iteración 3:** Construcción del `TaskListComponent`. Se armó la UI con la tabla de Angular Material (`MatTable`) inyectada en el `ProjectDetailComponent`.
-* **Iteración 4:** Construcción del modal `TaskCreateDialogComponent`. Se integró `ReactiveFormsModule` con validadores y se atajó el error de UI al intentar guardar en un proyecto `CLOSED`. Se implementó el `@Input` para deshabilitar el botón proactivamente.
-* **Iteración 5:** Debugging Full-stack. Se solucionaron los errores de JWT, el NG0100 de Change Detection, y el error de cardinalidad de Spring Data JPA.
-* **Iteración 6:** Construcción del modal `TaskChangeStatusDialogComponent`. Implementación final del cambio de estados inyectando la información de la tarea por `MAT_DIALOG_DATA`.
+**Iteración 1: Estructura de Dominio y Servicios**
+* **Prompt :** *"Actúa como un desarrollador Angular Senior. Basado en el esquema relacional del dominio de tareas, genera las interfaces TypeScript (TaskResponseDTO, CreateTaskRequestDTO) tipando estrictamente los estados (TODO, IN_PROGRESS, DONE). Además, crea el TaskService utilizando la inyección moderna (`inject()`) de HttpClient para consumir el endpoint GET `/api/v1/projects/{projectId}/tasks`."*
+
+**Iteración 2: Maquetado del Listado (Master-Detail)**
+* **Prompt :** *"Genera un componente standalone `TaskListComponent` utilizando Angular Material (`MatTable`). Debe implementar el patrón Master-Detail recibiendo el `projectId` como `@Input()` desde el componente padre y delegar la carga reactiva de datos al `TaskService`."*
+
+**Iteración 3: Definición Arquitectónica de Módulos (DDD)**
+* **Prompt :** *"Aplicando principios de Clean Architecture y Domain-Driven Design para el frontend, define la estructura de carpetas óptima para el módulo de tareas. Justifica si el `TaskListComponent` debe alojarse dentro del feature de proyectos o tener su propio feature aislado."*
+* 
+
+**Iteración 4: Componente de Creación con Validaciones**
+* **Prompt :** *"Genera el componente `TaskCreateDialogComponent` utilizando `MatDialog` y `ReactiveFormsModule`. Implementa las siguientes reglas de negocio en el formulario: campo título obligatorio (mínimo 3 caracteres) y horas estimadas con valor mínimo de 1. Maneja el estado de carga (`isLoading`) durante la petición HTTP."*
+
+
+**Iteración 5: Bugfix Backend - Spring Data JPA (Cardinalidad)**
+* **Prompt :** *"Analiza la siguiente excepción en el backend de Spring Boot: `IncorrectResultSizeDataAccessException: Query did not return a unique result: 2 results were returned`. Se adjunta el código del Controller y el UseCase. Identifica el error de cardinalidad en el adaptador de persistencia y proporciona la firma correcta para la interfaz `TaskJpaRepository`."*
+
+**Iteración 6: Mutación de Estado**
+* **Prompt :** *"Implementa el componente `TaskChangeStatusDialogComponent`. Utiliza el inyector `MAT_DIALOG_DATA` para recibir el objeto de la tarea y preseleccionar su estado actual en un `mat-select`. Implementa la llamada al endpoint de mutación de estado y actualiza la UI de forma asíncrona al confirmar."*
