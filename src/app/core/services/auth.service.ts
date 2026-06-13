@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.models';
 import { environment } from '../../env/environment';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -47,4 +48,23 @@ export class AuthService {
     localStorage.setItem(this.TOKEN_KEY, token);
     this.isAuthenticatedSubject.next(true);
   }
+
+  getDecodedUser(): { name: string; email: string } | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const decoded: any = jwtDecode(token);
+      console.log('Contenido real de mi JWT:', decoded);
+      return {
+        name: decoded.name || decoded.sub, 
+        email: decoded.sub
+      };
+    } catch (error) {
+      console.error('Error decodificando el token', error);
+      return null;
+    }
+  }
+
+
 }

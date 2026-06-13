@@ -1,0 +1,45 @@
+@if (showNavbar()) {
+<mat-toolbar color="primary" class="navbar mat-elevation-z4">
+
+    <div class="navbar-container">
+
+  <div class="brand">
+    <mat-icon>task_alt</mat-icon>
+    <span>Gestor de Proyectos</span>
+  </div>
+
+  <span class="spacer"></span>
+
+  @if (user(); as currentUser) {
+    <div class="desktop-menu">
+      <div class="user-info">
+        <span class="user-name">{{ currentUser.name }}</span>
+        <span class="user-email">{{ currentUser.email }}</span>
+      </div>
+      <button mat-flat-button color="warn" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Salir
+      </button>
+    </div>
+
+    <div class="mobile-menu">
+      <button mat-icon-button [matMenuTriggerFor]="mobileMenu" aria-label="Menú de usuario">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <mat-menu #mobileMenu="matMenu" xPosition="before">
+        <div class="mobile-user-info">
+          <span class="user-name">{{ currentUser.name }}</span>
+          <span class="user-email">{{ currentUser.email }}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon color="warn">logout</mat-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+      </mat-menu>
+    </div>
+  }
+  </div>
+</mat-toolbar>
+}
