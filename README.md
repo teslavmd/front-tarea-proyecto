@@ -1,59 +1,45 @@
-# FrontedTareaProyecto
+# Project and Task Management Platform
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.4.
+A full-stack web application designed to manage projects and correlative tasks.
 
-## Development server
+## Technologies
 
-To start a local development server, run:
+### Backend
+* Java
+* Spring Boot
+* Spring Security & JWT (JSON Web Tokens)
+* Spring Data JPA
+* Maven
 
-```bash
-ng serve
-```
+### Frontend
+* Angular 17+ (Standalone Components)
+* Angular Material
+* Signals & RxJS
+* jwt-decode
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Architecture Overview
 
-## Code scaffolding
+The frontend follows a structural approach divided into three main directories to ensure scalability:
+* **Core:** Contains singletons, global layout components (like the Navbar), HTTP interceptors, and authentication guards.
+* **Features:** Contains the isolated business logic modules (Projects, Tasks, Auth).
+* **Shared:** Contains reusable UI components and formatting pipes.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Application Routes
 
-```bash
-ng generate component component-name
-```
+### Frontend Routes (Angular)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+| Route | Access | Description |
+| :--- | :--- | :--- |
+| `/auth/login` | Public | User authentication form. The global Navbar is hidden on this route. |
+| `/projects` | Protected | Main dashboard displaying the list of projects with client-side filtering. |
+| `/projects/:id` | Protected | Detailed view of a specific project and its associated tasks. |
 
-```bash
-ng generate --help
-```
+### Backend Endpoints (Spring Boot)
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/v1/auth/login` | Authenticates a user and returns a signed JWT containing custom claims. |
+| `GET` | `/api/v1/projects` | Retrieves a list of projects for the authenticated user. |
+| `POST` | `/api/v1/projects` | Creates a new project in the database. |
+| `GET` | `/api/v1/tasks` | Retrieves tasks associated with a specific project ID. |
+| `POST` | `/api/v1/tasks` | Creates a new task. Returns a 400/409 error if the parent project is closed. |
